@@ -1,2 +1,3 @@
 # TerrariaSharpServer
-TerrariaSharpServer (TSS) is a open-source non-official Terraria Game Server.
+
+TerrariaSharpServer (TSS) is a non-official open-source Terraria Game Server.
