@@ -4,16 +4,11 @@ using System.IO;
 
 namespace TSSLib.Utils.IO
 {
-    public class ConfigFile
+    public static class ConfigFile
     {
-        private Dictionary<string, object> data;
+        private static Dictionary<string, object> data = new Dictionary<string, object>();
 
-        public ConfigFile()
-        {
-            data = new Dictionary<string, object>();
-        }
-
-        public void Load(string path)
+        public static void Load(string path)
         {
             if (path.EndsWith(".cfg") && File.Exists(path))
             {
@@ -42,13 +37,12 @@ namespace TSSLib.Utils.IO
             }
         }
 
-        public T GetData<T>(string key) where T : class
+        public static T GetData<T>(string key)
         {
             if (data.ContainsKey(key))
                 return (T)data[key];
             else
-                return null;
+                return default(T);
         }
-
     }
 }

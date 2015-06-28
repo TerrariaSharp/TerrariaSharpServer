@@ -10,12 +10,9 @@ namespace TSSLib
     public class TerrariaServer
     {
 
-        private ConfigFile configFile;
-
         public TerrariaServer(string configFilePath)
         {
-            configFile = new ConfigFile();
-            configFile.Load(configFilePath);
+            ConfigFile.Load(configFilePath);
         }
 
         public void Start()
