@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TSSLib;
 
 namespace TSS_ServerExample
@@ -11,12 +7,17 @@ namespace TSS_ServerExample
     {
         private static TerrariaServer terrariaServer;
 
+        /// <summary>
+        /// Main method
+        /// </summary>
+        /// <param name="args">Execution's args</param>
         static void Main(string[] args)
         {
 
-            terrariaServer = new TerrariaServer("config.cfg");
+            terrariaServer = new TerrariaServer();
             terrariaServer.Start();
-        
+
+            Console.Read();
         }
     }
 }

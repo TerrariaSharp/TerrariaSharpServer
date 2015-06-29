@@ -6,43 +6,69 @@ namespace TSSLib.Utils.IO
 {
     public static class ConfigFile
     {
-        private static Dictionary<string, object> data = new Dictionary<string, object>();
+        private static Dictionary<string, string> data = new Dictionary<string, string>();
 
-        public static void Load(string path)
+        /// <summary>
+        /// Load the config file
+        /// </summary>
+        public static void Load()
         {
-            if (path.EndsWith(".cfg") && File.Exists(path))
+            if (!File.Exists(ApplicationSettings.TSSConfigFileName))
+                CreateConfigFile();
+            string line;
+            string[] lineSplit;
+            byte lineNumber = 1;
+            data.Clear();
+            using (StreamReader sr = new StreamReader(ApplicationSettings.TSSConfigFileName))
             {
-                string line;
-                byte lineNumber = 1;
-                data.Clear();
-                using (StreamReader sr = new StreamReader(path))
+                while ((line = sr.ReadLine()) != null)
                 {
-                    while ((line = sr.ReadLine()) != null)
+                    line = line.Trim();
+                    if (!line.StartsWith("//"))
                     {
                         try
                         {
-                            data.Add(line.Split('=')[0], line.Split('=')[1]);
+                            lineSplit = line.Split('=');
+                            data.Add(lineSplit[0], lineSplit[1]);
                         }
                         catch (Exception ex)
                         {
                             throw new Exception("Error at line : " + lineNumber + ". More info : " + ex.Message);
                         }
-                        lineNumber++;
                     }
+                    lineNumber++;
                 }
-            }
-            else
-            {
-                throw new Exception("Invalid or non-existent file.");
             }
         }
 
-        public static T GetData<T>(string key)
+        /// <summary>
+        /// Get data from configuration file
+        /// </summary>
+        /// <param name="key">Name of the data</param>
+        /// <returns>Value</returns>
+        public static string GetData(string key)
         {
             if (data.ContainsKey(key))
-                return (T)data[key];
+                return data[key];
             else
-                return default(T);
+                return null;
+        }
+
+        /// <summary>
+        /// Create a default config file
+        /// </summary>
+        private static void CreateConfigFile()
+        {
+            using (StreamWriter sw = new StreamWriter(ApplicationSettings.TSSConfigFileName))
+            {
+                sw.WriteLine("// " + ApplicationSettings.ApplicationName + " - " + ApplicationSettings.ApplicationVersion);
+                sw.WriteLine("// " + DateTime.Now);
+                sw.WriteLine("serverName=Default TerrariaSharpServer");
+                sw.WriteLine("worldName=TSSworld");
+                sw.WriteLine("maxPlayer=16");
+                sw.WriteLine("serverPassword=");
+                sw.WriteLine("serverPort=2048");
+            }
         }
     }
 }
