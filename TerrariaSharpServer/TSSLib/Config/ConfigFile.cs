@@ -2,24 +2,36 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace TSSLib.Utils.IO
+namespace TSSLib.Config
 {
-    public static class ConfigFile
+    public class ConfigFile
     {
-        private static Dictionary<string, string> data = new Dictionary<string, string>();
+        private Dictionary<string, string> data = new Dictionary<string, string>();
+
+        private string path;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="path"></param>
+        public ConfigFile(string path)
+        {
+            this.path = path;
+        }
 
         /// <summary>
         /// Load the config file
         /// </summary>
-        public static void Load()
+        public void Load()
         {
-            if (!File.Exists(ApplicationSettings.TSSConfigFileName))
-                CreateConfigFile();
+            if (path == Config.ApplicationSettings.TSSConfigFileName)
+                if (!File.Exists(path))
+                    CreateServerConfigFile();
             string line;
             string[] lineSplit;
             byte lineNumber = 1;
             data.Clear();
-            using (StreamReader sr = new StreamReader(ApplicationSettings.TSSConfigFileName))
+            using (StreamReader sr = new StreamReader(path))
             {
                 while ((line = sr.ReadLine()) != null)
                 {
@@ -46,10 +58,10 @@ namespace TSSLib.Utils.IO
         /// </summary>
         /// <param name="key">Name of the data</param>
         /// <returns>Value</returns>
-        public static string GetData(string key)
+        public string GetData(string key)
         {
             if (data.ContainsKey(key))
-                return data[key];
+                return data[key].Trim();
             else
                 return null;
         }
@@ -57,17 +69,18 @@ namespace TSSLib.Utils.IO
         /// <summary>
         /// Create a default config file
         /// </summary>
-        private static void CreateConfigFile()
+        private static void CreateServerConfigFile()
         {
-            using (StreamWriter sw = new StreamWriter(ApplicationSettings.TSSConfigFileName))
+            using (StreamWriter sw = new StreamWriter(Config.ApplicationSettings.TSSConfigFileName))
             {
-                sw.WriteLine("// " + ApplicationSettings.ApplicationName + " - " + ApplicationSettings.ApplicationVersion);
+                sw.WriteLine("// " + Config.ApplicationSettings.ApplicationName + " - " + Config.ApplicationSettings.ApplicationVersion);
                 sw.WriteLine("// " + DateTime.Now);
                 sw.WriteLine("serverName=Default TerrariaSharpServer");
                 sw.WriteLine("worldName=TSSworld");
                 sw.WriteLine("maxPlayer=16");
                 sw.WriteLine("serverPassword=");
                 sw.WriteLine("serverPort=2048");
+                sw.WriteLine("lang=fr");
             }
         }
     }

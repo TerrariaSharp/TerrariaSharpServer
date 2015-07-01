@@ -16,8 +16,6 @@ namespace TSS_ServerExample
 
             terrariaServer = new TerrariaServer();
             terrariaServer.Start();
-
-            Console.Read();
         }
     }
 }

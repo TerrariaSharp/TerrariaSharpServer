@@ -1,4 +1,4 @@
-﻿namespace TSSLib.Basics.Utils
+﻿namespace TSSLib.Utils.Others
 {
     public class Color
     {

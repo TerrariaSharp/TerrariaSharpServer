@@ -1,4 +1,4 @@
-﻿namespace TSSLib
+﻿namespace TSSLib.Config
 {
     public static class ApplicationSettings
     {

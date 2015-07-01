@@ -47,7 +47,7 @@ namespace TSSLib.Utils.Network
             {
                 throw ex;
             }
-            
+
         }
 
         /// <summary>
@@ -97,16 +97,15 @@ namespace TSSLib.Utils.Network
 
             while (true)
             {
-                if (OnReceiveData != null)
+                try
                 {
-                    try
-                    {
-                        OnReceiveData.Invoke(client, client.Receive());
-                    }
-                    catch (Exception ex)
-                    {
-                        break;
-                    }
+                    Packet receivePacket = client.Receive();
+                    if (OnReceiveData != null)
+                        OnReceiveData.Invoke(client, receivePacket);
+                }
+                catch
+                {
+                    break;
                 }
             }
 
@@ -116,6 +115,18 @@ namespace TSSLib.Utils.Network
                 OnPlayerDisconnect.Invoke(client);
 
             client.Close();
+        }
+
+        /// <summary>
+        /// Send packet to all connected clients
+        /// </summary>
+        /// <param name="packet">Packet to send</param>
+        public void SendToAll(Packet packet)
+        {
+            foreach (TcpClient c in tcpClients)
+            {
+                c.Send(packet.ToByteArray());
+            }
         }
     }
 }
