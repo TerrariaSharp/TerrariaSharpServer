@@ -1,5 +1,5 @@
 ﻿using System.Net.Sockets;
-using TSSLib.Basics.Utils;
+using TSSLib.Utils.Others;
 
 namespace TSSLib.Basics
 {
